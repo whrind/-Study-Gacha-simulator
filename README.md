@@ -1,3 +1,2 @@
-# Study-Gacha-simulator
+# Gacha? simulator
 Pseudorandomness (fake random)
-Gacha? simulator
