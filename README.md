@@ -1,2 +1,4 @@
-# Gacha? simulator (Not tutorial)
+# Gacha
 Pseudorandomness (fake random)
+real random
+personal studying
