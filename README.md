@@ -1,4 +1,4 @@
 # Gacha
-Pseudorandomness (fake random)
-real random
-personal studying
+Pseudorandomness (fake random)/n
+real random/n
+personal studying/n
