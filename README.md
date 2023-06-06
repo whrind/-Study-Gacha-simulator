@@ -1,5 +1,5 @@
 # Gacha
-Pseudorandomness (fake random)<br>
+Reseraching Pseudorandomness (fake random)<br>
 
 real random<br>
 
