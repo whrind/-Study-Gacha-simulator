@@ -1,4 +1,4 @@
-# Gacha
+# Random
 Reseraching Pseudorandomness (fake random)<br>
 
 real random<br>
