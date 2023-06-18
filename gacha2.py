@@ -13,23 +13,28 @@ def main():
     pool = []
     rec = []
     check(pool, rec)
+    # test(pool)
     gacha(pool)
     pass
 
 
-def check(pool, rec):   # back modified pool
-    s3 = [3]    # 40%
-    s4 = [4]    # 50%
-    s5 = [5]    # 8%
-    s6 = [6]    # 2%    initiative is 0.2%(2), gradually to 12.2%(122), avg is 2%, if 6 that reset to 0.2%
-    record = [6, 6]     # for initiative
+def init():
+    s3 = [3]  # 40%
+    s4 = [4]  # 50%
+    s5 = [5]  # 8%
+    s6 = [6]  # 2%    initiative is 0.2%(2), gradually to 12.2%(122), avg is 2%, if 6 that reset to 0.2%
+    n = 981  # 0, 1, 2....
+    pool = s3 * 400 + s4 * 500 + s5 * 80 + s6 * 2  # 加权重 weight 1000
+    return pool, n
+
+
+def check(pool, rec, n):   # back modified pool
+    record = []     # for initiative
     record += rec
-    n = 981     # 0, 1, 2....
+    s6 = [6]
     if record.count(6) > 1:
         record.clear()
-        pool = s3*400 + s4*500 + s5*80 + s6*2   # 加权重 weight 1000
-        n = 981
-        return pool, record, n
+        return init()[0], record, init()[1]
     else:
         pool += s6*2
         n += 2
@@ -60,22 +65,29 @@ def tentime(pool):
 
 
 def test(pool):      # test the choice distribution of pool
-    res = []
-    for _ in range(1000):
-        res.append(pool[random.randint(0, 999)])
-    print('The 3 (40%) has', res.count(3))
-    print('The 4 (50%) has', res.count(4))
-    print('The 5 (8%) has', res.count(5))
-    print('The 6 (2%) has', res.count(6))
+    result = []
+    rec = []
+    for _ in range(100):
+        # res.append(pool[random.randint(0, 999)])
+        pool = check(pool, rec)[0]
+        n = check(pool, rec)[2]
+        result.append(pool[random.randint(0, n)])
+        rec += result
+        check(pool, rec)
+    print('The 3 (40%) has', rec.count(3))
+    print('The 4 (50%) has', rec.count(4))
+    print('The 5 (8%) has', rec.count(5))
+    print('The 6 (2%) has', rec.count(6))
 
 
 def gacha(pool):
     x = input('Please input your choice:(1 or 10, or q to quit) ')
     if x == '1':
-        onetime(pool)
+        print('Your result is ', onetime(pool)[1])
+        print('rec is ', onetime(pool)[0])
         gacha(pool)
     elif x == '10':
-        tentime(pool)
+        print('Your result is ', tentime(pool)[1])
         gacha(pool)
     elif x == 'q':
         print('Thanks for your support!')
