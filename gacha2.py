@@ -4,80 +4,82 @@
 import random
 '''linear regression ?'''
 
+gpool = []      # global variable
+grec = []
+gn = 0
+gresult = []
+
+
 def main():
     # s3 = [3]    # 40%
     # s4 = [4]    # 50%
     # s5 = [5]    # 8%
     # s6 = [6]    # 2%    initiative is 0.2%(2), gradually to 12.2%(122), avg is 2%, if 6 that reset to 0.2%
     # pool = s3*400 + s4*500 + s5*80 + s6*2  # 加权重 weight 1000
-    pool = []
-    rec = []
-    check(pool, rec)
-    # test(pool)
-    gacha(pool)
+    init()
+    test()
     pass
 
 
 def init():
+    global gpool, gn
     s3 = [3]  # 40%
     s4 = [4]  # 50%
     s5 = [5]  # 8%
     s6 = [6]  # 2%    initiative is 0.2%(2), gradually to 12.2%(122), avg is 2%, if 6 that reset to 0.2%
-    n = 981  # 0, 1, 2....
-    pool = s3 * 400 + s4 * 500 + s5 * 80 + s6 * 2  # 加权重 weight 1000
-    return pool, n
+    gn += 981  # 0, 1, 2....
+    gpool += s3 * 400 + s4 * 500 + s5 * 80 + s6 * 2  # 加权重 weight 1000
 
 
-def check(pool, rec, n):   # back modified pool
-    record = []     # for initiative
-    record += rec
-    s6 = [6]
-    if record.count(6) > 1:
-        record.clear()
-        return init()[0], record, init()[1]
+def check():   # return modified pool
+    global gpool, grec, gn
+    # record = []     # for initiative
+    # record += rec
+    if grec.count(6) > 0:
+        grec.clear()
+        init()
     else:
-        pool += s6*2
-        n += 2
-        return pool, record, n
+        gpool += [6]*2
+        gn += 2
 
 
-def onetime(pool):
+def onetime():  # 解包一次get，把rec储存，下次get在返回rec
+    global gpool, grec, gn
     result = []
-    rec = []
-    pool = check(pool, rec)[0]
-    n = check(pool, rec)[2]
-    result.append(pool[random.randint(0, n)])
-    rec += result
-    check(pool, rec)    # give back the rec
-    return rec, result
+    result.append(gpool[random.randint(0, gn)])
+    grec += result
+    result.clear()
+    check()
 
 
-def tentime(pool):
+def tentime():
+    global gpool, grec, gn
     result = []
-    rec = []
     for _ in range(10):
-        pool = check(pool, rec)[0]
-        n = check(pool, rec)[2]
-        result.append(pool[random.randint(0, n)])
-        rec += result
-        check(pool, rec)
-    return rec, result
+        result.append(gpool[random.randint(0, gn)])
+        grec += result
+        result.clear()
+        check()
 
 
-def test(pool):      # test the choice distribution of pool
+def test():      # test the choice distribution of pool
+    global gpool, grec, gn, gresult
     result = []
-    rec = []
-    for _ in range(100):
+    for _ in range(1000):
         # res.append(pool[random.randint(0, 999)])
-        pool = check(pool, rec)[0]
-        n = check(pool, rec)[2]
-        result.append(pool[random.randint(0, n)])
-        rec += result
-        check(pool, rec)
-    print('The 3 (40%) has', rec.count(3))
-    print('The 4 (50%) has', rec.count(4))
-    print('The 5 (8%) has', rec.count(5))
-    print('The 6 (2%) has', rec.count(6))
+        result.append(gpool[random.randint(0, gn)])
+        grec += result
+        gresult += result
+        result.clear()
+        check()
+        # print('The 3 (40%) has', gpool.count(3))
+        # print('The 4 (50%) has', gpool.count(4))
+        # print('The 5 (8%) has', gpool.count(5))
+        # print('The 6 (2%) has', gpool.count(6))
+    print('Final 3 (40%) has', gresult.count(3))
+    print('Final 4 (50%) has', gresult.count(4))
+    print('Final 5 (8%) has', gresult.count(5))
+    print('Final 6 (2%) has', gresult.count(6))
 
 
 def gacha(pool):
