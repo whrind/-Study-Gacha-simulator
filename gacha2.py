@@ -39,8 +39,8 @@ def check():   # return modified pool
         grec.clear()
         init()
     else:
-        gpool += [6]*2
-        gn += 2
+        gpool += [6]*1
+        gn += 1
 
 
 def onetime():  # 解包一次get，把rec储存，下次get在返回rec
@@ -76,10 +76,11 @@ def test():      # test the choice distribution of pool
         # print('The 4 (50%) has', gpool.count(4))
         # print('The 5 (8%) has', gpool.count(5))
         # print('The 6 (2%) has', gpool.count(6))
-    print('Final 3 (40%) has', gresult.count(3))
-    print('Final 4 (50%) has', gresult.count(4))
-    print('Final 5 (8%) has', gresult.count(5))
-    print('Final 6 (2%) has', gresult.count(6))
+    total = gresult.count(3) + gresult.count(4) + gresult.count(5) + gresult.count(6)
+    print(f"Final 3 (40%) is {(gresult.count(3)/total)*100:.2f}%")
+    print(f'Final 4 (50%) is {(gresult.count(4)/total)*100:.2f}%')
+    print(f'Final 5 (8%) is {(gresult.count(5)/total)*100:.2f}%')
+    print(f'Final 6 (2%) is {(gresult.count(6)/total)*100:.2f}%')
 
 
 def gacha(pool):
