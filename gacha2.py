@@ -18,6 +18,7 @@ def main():
     # pool = s3*400 + s4*500 + s5*80 + s6*2  # 加权重 weight 1000
     init()
     test()
+    # gacha()
     pass
 
 
@@ -32,7 +33,7 @@ def init():
 
 
 def check():   # return modified pool
-    global gpool, grec, gn
+    global gpool, grec, gn, gresult
     # record = []     # for initiative
     # record += rec
     if grec.count(6) > 0:
@@ -44,20 +45,24 @@ def check():   # return modified pool
 
 
 def onetime():  # 解包一次get，把rec储存，下次get在返回rec
-    global gpool, grec, gn
+    global gpool, grec, gn, gresult
+    gresult.clear()
     result = []
     result.append(gpool[random.randint(0, gn)])
     grec += result
+    gresult += result
     result.clear()
     check()
 
 
 def tentime():
-    global gpool, grec, gn
+    global gpool, grec, gn, gresult
+    gresult.clear()
     result = []
     for _ in range(10):
         result.append(gpool[random.randint(0, gn)])
         grec += result
+        gresult += result
         result.clear()
         check()
 
@@ -83,20 +88,21 @@ def test():      # test the choice distribution of pool
     print(f'Final 6 (2%) is {(gresult.count(6)/total)*100:.2f}%')
 
 
-def gacha(pool):
+def gacha():
     x = input('Please input your choice:(1 or 10, or q to quit) ')
     if x == '1':
-        print('Your result is ', onetime(pool)[1])
-        print('rec is ', onetime(pool)[0])
-        gacha(pool)
+        onetime()
+        print('Your result is ', gresult)
+        gacha()
     elif x == '10':
-        print('Your result is ', tentime(pool)[1])
-        gacha(pool)
+        tentime()
+        print('Your result is ', gresult)
+        gacha()
     elif x == 'q':
         print('Thanks for your support!')
     else:
         print('Do not support it, please try again!')
-        gacha(pool)
+        gacha()
 
 
 main()
